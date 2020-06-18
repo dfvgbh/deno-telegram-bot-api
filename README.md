@@ -2,18 +2,18 @@
 
 Simple, typed wrapper for Telegram bot API. 
 
-##Features
+## Features
 - Telegram API types and methods covered with TypeScript (~70%)
 - Pooling updates
 - Types system follows official [Telegram API](https://core.telegram.org/bots/api) 
 with enhancements for "At most one of the optional parameters"-like definitions
 
-##In progress
+## In progress
 - Webhooks
 - Error handling
 - Tests
 
-##Examples
+## Examples
 ```ts
 import { TelegramBot } from "../telegram-bot.ts";
 import { UpdateType } from "../types/update.ts";
