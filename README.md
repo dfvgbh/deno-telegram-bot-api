@@ -1,67 +1,67 @@
 # deno-telegram-bot-api
-
-Simple, typed wrapper for Telegram bot API. 
+Simple wrapper for Telegram bot API in 🦕
 
 ## Features
-- Telegram API types and methods covered with TypeScript (~70%)
+- Types for Telegram bot API (~70%)
 - Pooling updates
 - Types system follows official [Telegram API](https://core.telegram.org/bots/api) 
 with enhancements for "At most one of the optional parameters"-like definitions
 
 ## In progress
+- Docs
 - Webhooks
-- Error handling
 - Tests
 
 ## Examples
 ```ts
-import { TelegramBot } from "../telegram-bot.ts";
-import { UpdateType } from "../types/update.ts";
+import {
+  TelegramBot,
+  UpdateType,
+} from "https://deno.land/x/deno_telegram_bot_api/mod.ts";
 
-// provide your token here or in environment
-const TOKEN = "";
-const bot = new TelegramBot(TOKEN || Deno.env.get("TOKEN") as string);
+const TOKEN = ""; //your token
+const bot = new TelegramBot(TOKEN);
 
-// you can provide options such described https://core.telegram.org/bots/api#getupdates
+// accepts options described https://core.telegram.org/bots/api#getupdates
 // by default pooling timeout is 5s
 bot.startPolling();
 
 // UpdateType supports all telegram update types https://core.telegram.org/bots/api#update
-// When you pass UpdateType, you will get proper typed callback related to this particular update type
-bot.on(UpdateType.Message, ({ message }) => {
-  bot.sendMessage({
-    chat_id: message.chat.id,
-    text: "Chose a pill",
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "🔴", callback_data: "red" },
-          { text: "🔵", callback_data: "blue" },
+// When you pass UpdateType, you will get properly typed callback
+bot.on(UpdateType.Message, async ({ message }) => {
+  try {
+    await bot.sendMessage({
+      chat_id: message.chat.id,
+      text: "Chose a pill",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "🔴", callback_data: "red" },
+            { text: "🔵", callback_data: "blue" },
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 bot.on(UpdateType.CallbackQuery, ({ callback_query }) => {
-  if (callback_query.data === "red") {
-    bot.sendMessage({
-      chat_id: callback_query.from.id,
-      text: "🐰",
-    });
-  }
+  const { id, data, from } = callback_query;
+  const text = data === "red" ? "🐰" : "Good morning, Mr. Anderson.";
 
-  if (callback_query.data === "blue") {
-    bot.sendMessage({
-      chat_id: callback_query.from.id,
-      text: "Good morning, Mr. Anderson.",
-    });
-  }
+  bot.sendMessage({
+    chat_id: from.id,
+    text,
+  });
 
   bot.answerCallbackQuery({
-    callback_query_id: callback_query.id,
+    callback_query_id: id,
   });
 });
+
+bot.on(UpdateType.Error, (error) => console.error("Polling error", error));
 ```
 
 

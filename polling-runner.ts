@@ -1,5 +1,6 @@
 import { TelegramBot } from "./telegram-bot.ts";
 import { GetUpdates } from "./types/methods.ts";
+import { ErrorUpdateEvent } from "./types/update.ts";
 
 export type PollingParams = Parameters<GetUpdates>[0];
 
@@ -10,7 +11,7 @@ const DEFAULT_POLLING_PARAMS = {
 export class PollingRunner {
   isActive = false;
   params: PollingParams = DEFAULT_POLLING_PARAMS;
-  //TODO: PollingRunner.onUpdate as options instead of TelegramBot injection
+  //TODO: PollingRunner.onUpdate as option instead of TelegramBot injection
   bot?: TelegramBot;
 
   start(params: PollingParams, bot: TelegramBot) {
@@ -42,7 +43,7 @@ export class PollingRunner {
         this.bot.handleUpdates(updates);
       }
     } catch (error) {
-      console.error(error);
+      this.bot.updatesEventTarget.dispatchEvent(new ErrorUpdateEvent(error));
     } finally {
       await this.run();
     }
