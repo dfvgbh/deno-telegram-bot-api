@@ -10,6 +10,7 @@ import {
 } from "./base.ts";
 
 export enum UpdateType {
+  Error = "ERROR_UPDATE",
   Message = "MESSAGE_UPDATE",
   EditedMessage = "EDITED_MESSAGE_UPDATE",
   ChannelPost = "CHANNEL_POST_UPDATE",
@@ -45,6 +46,20 @@ export abstract class UpdateEvent extends Event {
 
 interface BaseUpdate {
   update_id: number;
+}
+
+export interface ErrorUpdate {
+  error: Error;
+}
+
+export class ErrorUpdateEvent extends Event {
+  constructor(public readonly error: ErrorUpdate) {
+    super(UpdateType.Error);
+  }
+}
+
+export function isErrorUpdateEvent(event: Event): event is ErrorUpdateEvent {
+  return !!(event as ErrorUpdateEvent).error;
 }
 
 export interface MessageUpdate extends BaseUpdate {

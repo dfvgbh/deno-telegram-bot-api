@@ -64,6 +64,8 @@ import {
   EditedChannelPostUpdateEvent,
   EditedMessageUpdate,
   EditedMessageUpdateEvent,
+  ErrorUpdate,
+  ErrorUpdateEvent,
   InlineQueryUpdate,
   InlineQueryUpdateEvent,
   isCallbackQueryUpdate,
@@ -71,6 +73,7 @@ import {
   isChosenInlineResultUpdate,
   isEditedChannelPostUpdate,
   isEditedMessageUpdate,
+  isErrorUpdateEvent,
   isInlineQueryUpdate,
   isMessageUpdate,
   isPollAnswerUpdate,
@@ -97,10 +100,11 @@ function makeEndpoint(token: string, methodName: string) {
 }
 
 export class TelegramBot {
-  private updatesEventTarget = new EventTarget();
+  // make private, decouple from polling
+  public updatesEventTarget = new EventTarget();
   private polling = new PollingRunner();
 
-  constructor(private token: string) {}
+  constructor(private readonly token: string) {}
 
   getMe: GetMe = () => this.methodRequest<GetMe>("getMe");
   sendMessage: SendMessage = (params) =>
@@ -215,6 +219,10 @@ export class TelegramBot {
     this.methodRequest<GetUpdates>("getUpdates", params);
 
   on(
+    eventType: UpdateType.Error,
+    callback: (error: ErrorUpdate) => void,
+  ): void;
+  on(
     eventType: UpdateType.Message,
     callback: (update: MessageUpdate) => void,
   ): void;
@@ -256,6 +264,7 @@ export class TelegramBot {
     callback: (update: PollAnswerUpdate) => void,
   ): void;
   on(eventType: UpdateType, callback: {
+    (error: ErrorUpdate): void;
     (update: MessageUpdate): void;
     (update: EditedMessageUpdate): void;
     (update: ChannelPostUpdate): void;
@@ -270,7 +279,11 @@ export class TelegramBot {
     (update: Update): void;
   }): void {
     this.updatesEventTarget.addEventListener(eventType, {
-      handleEvent: (event: UpdateEvent) => callback(event.payload),
+      handleEvent: (event: UpdateEvent | ErrorUpdateEvent) => {
+        isErrorUpdateEvent(event)
+          ? callback(event.error)
+          : callback(event.payload);
+      },
     });
   }
 
