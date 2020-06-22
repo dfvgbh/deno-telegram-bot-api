@@ -1,7 +1,7 @@
 import {
   TelegramBot,
   UpdateType,
-} from "https://deno.land/x/deno_telegram_bot_api/mod.ts";
+} from "https://deno.land/x/telegram_bot_api/mod.ts";
 
 const TOKEN = ""; // your token
 const bot = new TelegramBot(TOKEN);
