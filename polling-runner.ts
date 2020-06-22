@@ -1,6 +1,6 @@
 import { TelegramBot } from "./telegram-bot.ts";
-import { GetUpdates } from "./types/methods.ts";
-import { ErrorUpdateEvent } from "./types/update.ts";
+import { GetUpdates } from "./types/getting-updates/methods.ts";
+import { ErrorUpdateEvent } from "./types/getting-updates/update-helpers.ts";
 
 export type PollingParams = Parameters<GetUpdates>[0];
 
@@ -22,7 +22,7 @@ export class PollingRunner {
     };
     this.bot = bot;
     this.isActive = true;
-    this.run();
+    return this.run();
   }
 
   stop() {

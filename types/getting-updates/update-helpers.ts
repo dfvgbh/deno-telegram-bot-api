@@ -1,13 +1,7 @@
-import {
-  CallbackQuery,
-  ChosenInlineResult,
-  InlineQuery,
-  Message,
-  Poll,
-  PollAnswer,
-  PreCheckoutQuery,
-  ShippingQuery,
-} from "./base.ts";
+import { CallbackQuery, Message, Poll, PollAnswer } from "../common/objects.ts";
+import { ChosenInlineResult, InlineQuery } from "../inline-mode/objects.ts";
+import { PreCheckoutQuery, ShippingQuery } from "../payments/objects.ts";
+import { Update } from "./objects.ts";
 
 export enum UpdateType {
   Error = "ERROR_UPDATE",
@@ -23,22 +17,6 @@ export enum UpdateType {
   Poll = "POLL_UPDATE",
   PollAnswer = "POLL_ANSWER_UPDATE",
 }
-
-/**
- * @see https://core.telegram.org/bots/api#update
- */
-export type Update =
-  | MessageUpdate
-  | EditedMessageUpdate
-  | ChannelPostUpdate
-  | EditedChannelPostUpdate
-  | InlineQueryUpdate
-  | ChosenInlineResultUpdate
-  | CallbackQueryUpdate
-  | ShippingQueryUpdate
-  | PreCheckoutQueryUpdate
-  | PollUpdate
-  | PollAnswerUpdate;
 
 export abstract class UpdateEvent extends Event {
   abstract readonly payload: Update;

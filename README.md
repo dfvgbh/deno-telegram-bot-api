@@ -1,9 +1,9 @@
 # deno-telegram-bot-api
 🦕 wrapper for Telegram bot API 
 
-## Core features
-- Typed API system follows official [Telegram API](https://core.telegram.org/bots/api) 
-with enhancements for "At most one of the optional parameters"-like types
+## Features
+- Fully typed API follows official [Telegram API](https://core.telegram.org/bots/api) 
+(with enhancements for "At most one of the optional parameters"-like types)
 - Pooling updates
 
 ## In progress
@@ -16,7 +16,7 @@ with enhancements for "At most one of the optional parameters"-like types
 import {
   TelegramBot,
   UpdateType,
-} from "https://deno.land/x/deno_telegram_bot_api/mod.ts";
+} from "https://deno.land/x/telegram_bot_api/mod.ts";
 
 const TOKEN = ""; // your token
 const bot = new TelegramBot(TOKEN);

@@ -3,12 +3,7 @@ import {
   AnswerCallbackQuery,
   DeleteChatPhoto,
   DeleteChatStickerSet,
-  DeleteMessage,
-  EditMessageCaption,
   EditMessageLiveLocation,
-  EditMessageMedia,
-  EditMessageReplyMarkup,
-  EditMessageText,
   ExportChatInviteLink,
   ForwardMessage,
   GetChat,
@@ -18,11 +13,9 @@ import {
   GetFile,
   GetMe,
   GetMyCommands,
-  GetUpdates,
   GetUserProfilePhotos,
   KickChatMember,
   LeaveChat,
-  Method,
   PinChatMessage,
   PromoteChatMember,
   RestrictChatMember,
@@ -49,10 +42,18 @@ import {
   SetChatTitle,
   SetMyCommands,
   StopMessageLiveLocation,
-  StopPoll,
   UnbanChatMember,
   UnpinChatMessage,
-} from "./types/methods.ts";
+} from "./types/common/methods.ts";
+import { GetGameHighScores, SetGameScore } from "./types/games/methods";
+import { SendGame } from "./types/games/methods.ts";
+import {
+  DeleteWebhook,
+  GetWebhookInfo,
+  SetWebhook,
+} from "./types/getting-updates/methods";
+import { GetUpdates } from "./types/getting-updates/methods.ts";
+import { Update } from "./types/getting-updates/objects.ts";
 import {
   CallbackQueryUpdate,
   CallbackQueryUpdateEvent,
@@ -90,17 +91,42 @@ import {
   PreCheckoutQueryUpdateEvent,
   ShippingQueryUpdate,
   ShippingQueryUpdateEvent,
-  Update,
   UpdateEvent,
   UpdateType,
-} from "./types/update.ts";
+} from "./types/getting-updates/update-helpers.ts";
+import { AnswerInlineQuery } from "./types/inline-mode/methods.ts";
+import { Method } from "./types/methods.ts";
+import { SetPassportDataErrors } from "./types/passport/methods.ts";
+import {
+  AnswerPreCheckoutQuery,
+  AnswerShippingQuery,
+} from "./types/payments/methods";
+import { SendInvoice } from "./types/payments/methods.ts";
+import {
+  AddStickerToSet,
+  CreateNewStickerSet,
+  DeleteStickerFromSet,
+  GetStickerSet,
+  SetStickerPositionInSet,
+  SetStickerSetThumb,
+  UploadStickerFile,
+} from "./types/stickers/methods";
+import { SendSticker } from "./types/stickers/methods.ts";
+import {
+  DeleteMessage,
+  EditMessageCaption,
+  EditMessageMedia,
+  EditMessageReplyMarkup,
+  EditMessageText,
+  StopPoll,
+} from "./types/updating-messages/methods.ts";
 
 function makeEndpoint(token: string, methodName: string) {
   return `https://api.telegram.org/bot${token}/${methodName}`;
 }
 
 export class TelegramBot {
-  // make private, decouple from polling
+  //TODO: make private, decouple from polling. +Webhooks
   public updatesEventTarget = new EventTarget();
   private polling = new PollingRunner();
 
@@ -217,6 +243,50 @@ export class TelegramBot {
     this.methodRequest<DeleteMessage>("deleteMessage", params);
   getUpdates: GetUpdates = (params) =>
     this.methodRequest<GetUpdates>("getUpdates", params);
+  setWebhook: SetWebhook = (params) =>
+    this.methodRequest<SetWebhook>("setWebhook", params);
+  deleteWebhook: DeleteWebhook = () =>
+    this.methodRequest<DeleteWebhook>("deleteWebhook", params);
+  getWebhookInfo: GetWebhookInfo = () =>
+    this.methodRequest<GetWebhookInfo>("getWebhookInfo", params);
+  sendSticker: SendSticker = (params) =>
+    this.methodRequest<SendSticker>("sendSticker", params);
+  getStickerSet: GetStickerSet = (params) =>
+    this.methodRequest<GetStickerSet>("getStickerSet", params);
+  uploadStickerFile: UploadStickerFile = (params) =>
+    this.methodRequest<UploadStickerFile>("uploadStickerFile", params);
+  createNewStickerSet: CreateNewStickerSet = (params) =>
+    this.methodRequest<CreateNewStickerSet>("createNewStickerSet", params);
+  addStickerToSet: AddStickerToSet = (params) =>
+    this.methodRequest<AddStickerToSet>("addStickerToSet", params);
+  setStickerPositionInSet: SetStickerPositionInSet = (params) =>
+    this.methodRequest<SetStickerPositionInSet>(
+      "setStickerPositionInSet",
+      params,
+    );
+  deleteStickerFromSet: DeleteStickerFromSet = (params) =>
+    this.methodRequest<DeleteStickerFromSet>("deleteStickerFromSet", params);
+  setStickerSetThumb: SetStickerSetThumb = (params) =>
+    this.methodRequest<SetStickerSetThumb>("setStickerSetThumb", params);
+  answerInlineQuery: AnswerInlineQuery = (params) =>
+    this.methodRequest<AnswerInlineQuery>("answerInlineQuery", params);
+  sendInvoice: SendInvoice = (params) =>
+    this.methodRequest<SendInvoice>("sendInvoice", params);
+  answerShippingQuery: AnswerShippingQuery = (params) =>
+    this.methodRequest<AnswerShippingQuery>("answerShippingQuery", params);
+  answerPreCheckoutQuery: AnswerPreCheckoutQuery = (params) =>
+    this.methodRequest<AnswerPreCheckoutQuery>(
+      "answerPreCheckoutQuery",
+      params,
+    );
+  setPassportDataErrors: SetPassportDataErrors = (params) =>
+    this.methodRequest<SetPassportDataErrors>("setPassportDataErrors", params);
+  sendGame: SendGame = (params) =>
+    this.methodRequest<SendGame>("sendGame", params);
+  setGameScore: SetGameScore = (params) =>
+    this.methodRequest<SetGameScore>("setGameScore", params);
+  getGameHighScores: GetGameHighScores = (params) =>
+    this.methodRequest<GetGameHighScores>("getGameHighScores", params);
 
   on(
     eventType: UpdateType.Error,
@@ -280,9 +350,11 @@ export class TelegramBot {
   }): void {
     this.updatesEventTarget.addEventListener(eventType, {
       handleEvent: (event: UpdateEvent | ErrorUpdateEvent) => {
-        isErrorUpdateEvent(event)
-          ? callback(event.error)
-          : callback(event.payload);
+        if (isErrorUpdateEvent(event)) {
+          callback(event.error);
+          return;
+        }
+        callback(event.payload);
       },
     });
   }
@@ -338,11 +410,10 @@ export class TelegramBot {
     }
   }
 
-  //TODO: provide ReturnType
   private methodRequest<T extends Method>(
     methodName: string,
     params?: Parameters<T>[0],
-  ): Promise<any> {
+  ): ReturnType<T> {
     return fetch(makeEndpoint(this.token, methodName), {
       method: "POST",
       headers: {
@@ -357,6 +428,6 @@ export class TelegramBot {
           const { error_code, description } = body;
           throw new Error(`${error_code}\n${description}`);
         }
-      });
+      }) as ReturnType<T>;
   }
 }

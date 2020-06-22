@@ -1,4 +1,14 @@
 /**
+ * Type definitions for objects from "Available types" section in official API docs
+ * @see https://core.telegram.org/bots/api#available-types
+ */
+
+import { CallbackGame, Game } from "../games/objects.ts";
+import { PassportData } from "../passport/objects.ts";
+import { Invoice, SuccessfulPayment } from "../payments/objects.ts";
+import { Sticker } from "../stickers/objects.ts";
+
+/**
  * @see https://core.telegram.org/bots/api#user
  */
 export interface User {
@@ -508,62 +518,8 @@ export interface InputMediaDocument {
   parse_mode?: string;
 }
 
+// TODO: investigate about type, probably should be a string
 /**
  * @see https://core.telegram.org/bots/api#inputfile
  */
-export interface InputFile {}
-
-/**
- * @see https://core.telegram.org/bots/api#user
- */
-export interface User {
-  id: number;
-  is_bot: boolean;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  language_code?: string;
-  can_join_groups?: boolean;
-  can_read_all_group_messages?: boolean;
-  supports_inline_queries?: boolean;
-}
-
-//TODO: provide types
-export interface Sticker {
-}
-
-//TODO: provide types
-export interface Game {
-}
-
-//TODO: provide types
-export interface Invoice {
-}
-
-//TODO: provide types
-export interface SuccessfulPayment {
-}
-
-//TODO: provide types
-export interface PassportData {
-}
-
-//TODO: provide types
-export interface CallbackGame {
-}
-
-//TODO: provide types
-export interface InlineQuery {
-}
-
-//TODO: provide types
-export interface ChosenInlineResult {
-}
-
-//TODO: provide types
-export interface ShippingQuery {
-}
-
-//TODO: provide types
-export interface PreCheckoutQuery {
-}
+export type InputFile = any;
