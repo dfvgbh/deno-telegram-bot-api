@@ -1,5 +1,9 @@
-export * from "./telegram-bot.ts";
-export * from "./polling-runner.ts";
+export * from "./telegram-bot/telegram-bot.ts";
+export {
+  RunOptions,
+  RunWithPollingOptions,
+  RunWithWebhookOptions,
+} from "./telegram-bot/run-options.ts";
 
 export * from "./types/common/methods.ts";
 export * from "./types/common/objects.ts";

@@ -25,7 +25,7 @@ export interface Game {
 /**
  * @see https://core.telegram.org/bots/api#callbackgame
  */
-export type CallbackGame = any;
+export type CallbackGame = never;
 
 /**
  * @see https://core.telegram.org/bots/api#gamehighscore
