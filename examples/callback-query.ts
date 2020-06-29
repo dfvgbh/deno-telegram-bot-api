@@ -3,18 +3,19 @@ import {
   UpdateType,
 } from "https://deno.land/x/telegram_bot_api/mod.ts";
 
-const TOKEN = ""; // your token
+const TOKEN = ""; // bot token
 const bot = new TelegramBot(TOKEN);
 
-// accepts options described in https://core.telegram.org/bots/api#getupdates
-// by default pooling timeout is 5s
-bot.startPolling();
+bot.run({
+  polling: true,
+});
 
-// UpdateType supports all telegram update types https://core.telegram.org/bots/api#update
-// When you pass UpdateType, you will get properly typed callback
 bot.on(UpdateType.Message, async ({ message }) => {
+  const chatId = message.chat.id;
+
+  // send message with keyboard
   await bot.sendMessage({
-    chat_id: message.chat.id,
+    chat_id: chatId,
     text: "Chose a pill",
     reply_markup: {
       inline_keyboard: [
@@ -27,18 +28,21 @@ bot.on(UpdateType.Message, async ({ message }) => {
   });
 });
 
-bot.on(UpdateType.CallbackQuery, ({ callback_query }) => {
+bot.on(UpdateType.CallbackQuery, async ({ callback_query }) => {
   const { id, data, from } = callback_query;
   const text = data === "red" ? "🐰" : "Good morning, Mr. Anderson.";
 
-  bot.sendMessage({
+  await bot.sendMessage({
     chat_id: from.id,
     text,
   });
 
-  bot.answerCallbackQuery({
+  await bot.answerCallbackQuery({
     callback_query_id: id,
   });
 });
 
-bot.on(UpdateType.Error, (error) => console.error("Polling error", error));
+bot.on(
+  UpdateType.Error,
+  ({ error }) => console.error("Glitch in the Matrix", error.stack),
+);

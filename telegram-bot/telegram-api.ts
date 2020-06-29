@@ -1,4 +1,3 @@
-import { PollingParams, PollingRunner } from "./polling-runner.ts";
 import {
   AnswerCallbackQuery,
   DeleteChatPhoto,
@@ -44,73 +43,36 @@ import {
   StopMessageLiveLocation,
   UnbanChatMember,
   UnpinChatMessage,
-} from "./types/common/methods.ts";
-import { GetGameHighScores, SetGameScore, SendGame } from "./types/games/methods.ts";
+} from "../types/common/methods.ts";
+import {
+  GetGameHighScores,
+  SendGame,
+  SetGameScore,
+} from "../types/games/methods.ts";
 import {
   DeleteWebhook,
-  GetWebhookInfo,
   GetUpdates,
+  GetWebhookInfo,
   SetWebhook,
-} from "./types/getting-updates/methods.ts";
-import { Update } from "./types/getting-updates/objects.ts";
-import {
-  CallbackQueryUpdate,
-  CallbackQueryUpdateEvent,
-  ChannelPostUpdate,
-  ChannelPostUpdateEvent,
-  ChosenInlineResultUpdate,
-  ChosenInlineResultUpdateEvent,
-  EditedChannelPostUpdate,
-  EditedChannelPostUpdateEvent,
-  EditedMessageUpdate,
-  EditedMessageUpdateEvent,
-  ErrorUpdate,
-  ErrorUpdateEvent,
-  InlineQueryUpdate,
-  InlineQueryUpdateEvent,
-  isCallbackQueryUpdate,
-  isChannelPostUpdate,
-  isChosenInlineResultUpdate,
-  isEditedChannelPostUpdate,
-  isEditedMessageUpdate,
-  isErrorUpdateEvent,
-  isInlineQueryUpdate,
-  isMessageUpdate,
-  isPollAnswerUpdate,
-  isPollUpdate,
-  isPreCheckoutQueryUpdate,
-  isShippingQueryUpdate,
-  MessageUpdate,
-  MessageUpdateEvent,
-  PollAnswerUpdate,
-  PollAnswerUpdateEvent,
-  PollUpdate,
-  PollUpdateEvent,
-  PreCheckoutQueryUpdate,
-  PreCheckoutQueryUpdateEvent,
-  ShippingQueryUpdate,
-  ShippingQueryUpdateEvent,
-  UpdateEvent,
-  UpdateType,
-} from "./types/getting-updates/update-helpers.ts";
-import { AnswerInlineQuery } from "./types/inline-mode/methods.ts";
-import { Method } from "./types/methods.ts";
-import { SetPassportDataErrors } from "./types/passport/methods.ts";
+} from "../types/getting-updates/methods.ts";
+import { AnswerInlineQuery } from "../types/inline-mode/methods.ts";
+import { Method } from "../types/methods.ts";
+import { SetPassportDataErrors } from "../types/passport/methods.ts";
 import {
   AnswerPreCheckoutQuery,
   AnswerShippingQuery,
   SendInvoice,
-} from "./types/payments/methods.ts";
+} from "../types/payments/methods.ts";
 import {
   AddStickerToSet,
   CreateNewStickerSet,
   DeleteStickerFromSet,
   GetStickerSet,
+  SendSticker,
   SetStickerPositionInSet,
   SetStickerSetThumb,
   UploadStickerFile,
-} from "./types/stickers/methods.ts";
-import { SendSticker } from "./types/stickers/methods.ts";
+} from "../types/stickers/methods.ts";
 import {
   DeleteMessage,
   EditMessageCaption,
@@ -118,17 +80,10 @@ import {
   EditMessageReplyMarkup,
   EditMessageText,
   StopPoll,
-} from "./types/updating-messages/methods.ts";
+} from "../types/updating-messages/methods.ts";
+import { makeEndpoint } from "./helpers.ts";
 
-function makeEndpoint(token: string, methodName: string) {
-  return `https://api.telegram.org/bot${token}/${methodName}`;
-}
-
-export class TelegramBot {
-  //TODO: make private, decouple from polling. +Webhooks
-  public updatesEventTarget = new EventTarget();
-  private polling = new PollingRunner();
-
+export abstract class TelegramApi {
   constructor(private readonly token: string) {}
 
   getMe: GetMe = () => this.methodRequest<GetMe>("getMe");
@@ -286,128 +241,6 @@ export class TelegramBot {
     this.methodRequest<SetGameScore>("setGameScore", params);
   getGameHighScores: GetGameHighScores = (params) =>
     this.methodRequest<GetGameHighScores>("getGameHighScores", params);
-
-  on(
-    eventType: UpdateType.Error,
-    callback: (error: ErrorUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.Message,
-    callback: (update: MessageUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.EditedMessage,
-    callback: (update: EditedMessageUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.ChannelPost,
-    callback: (update: ChannelPostUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.EditedChannelPost,
-    callback: (update: EditedChannelPostUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.InlineQuery,
-    callback: (update: InlineQueryUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.ChosenInlineResult,
-    callback: (update: ChosenInlineResultUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.CallbackQuery,
-    callback: (update: CallbackQueryUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.ShippingQuery,
-    callback: (update: ShippingQueryUpdate) => void,
-  ): void;
-  on(
-    eventType: UpdateType.PreCheckoutQuery,
-    callback: (update: PreCheckoutQueryUpdate) => void,
-  ): void;
-  on(eventType: UpdateType.Poll, callback: (update: PollUpdate) => void): void;
-  on(
-    eventType: UpdateType.PollAnswer,
-    callback: (update: PollAnswerUpdate) => void,
-  ): void;
-  on(eventType: UpdateType, callback: {
-    (error: ErrorUpdate): void;
-    (update: MessageUpdate): void;
-    (update: EditedMessageUpdate): void;
-    (update: ChannelPostUpdate): void;
-    (update: EditedChannelPostUpdate): void;
-    (update: InlineQueryUpdate): void;
-    (update: ChosenInlineResultUpdate): void;
-    (update: CallbackQueryUpdate): void;
-    (update: ShippingQueryUpdate): void;
-    (update: PreCheckoutQueryUpdate): void;
-    (update: PollUpdate): void;
-    (update: PollAnswerUpdate): void;
-    (update: Update): void;
-  }): void {
-    this.updatesEventTarget.addEventListener(eventType, {
-      handleEvent: (event: UpdateEvent | ErrorUpdateEvent) => {
-        if (isErrorUpdateEvent(event)) {
-          callback(event.error);
-          return;
-        }
-        callback(event.payload);
-      },
-    });
-  }
-
-  startPolling(params: PollingParams = {}) {
-    this.polling.start(params, this);
-  }
-
-  stopPolling() {
-    this.polling.stop();
-  }
-
-  //TODO: make private
-  handleUpdates(updates: Update[]) {
-    for (const update of updates) {
-      let updateEvent: UpdateEvent | undefined = undefined;
-
-      if (isMessageUpdate(update)) {
-        updateEvent = new MessageUpdateEvent(update);
-      }
-      if (isEditedMessageUpdate(update)) {
-        updateEvent = new EditedMessageUpdateEvent(update);
-      }
-      if (isChannelPostUpdate(update)) {
-        updateEvent = new ChannelPostUpdateEvent(update);
-      }
-      if (isEditedChannelPostUpdate(update)) {
-        updateEvent = new EditedChannelPostUpdateEvent(update);
-      }
-      if (isInlineQueryUpdate(update)) {
-        updateEvent = new InlineQueryUpdateEvent(update);
-      }
-      if (isChosenInlineResultUpdate(update)) {
-        updateEvent = new ChosenInlineResultUpdateEvent(update);
-      }
-      if (isCallbackQueryUpdate(update)) {
-        updateEvent = new CallbackQueryUpdateEvent(update);
-      }
-      if (isShippingQueryUpdate(update)) {
-        updateEvent = new ShippingQueryUpdateEvent(update);
-      }
-      if (isPreCheckoutQueryUpdate(update)) {
-        updateEvent = new PreCheckoutQueryUpdateEvent(update);
-      }
-      if (isPollUpdate(update)) updateEvent = new PollUpdateEvent(update);
-      if (isPollAnswerUpdate(update)) {
-        updateEvent = new PollAnswerUpdateEvent(update);
-      }
-
-      if (updateEvent) {
-        this.updatesEventTarget.dispatchEvent(updateEvent);
-      }
-    }
-  }
 
   private methodRequest<T extends Method>(
     methodName: string,

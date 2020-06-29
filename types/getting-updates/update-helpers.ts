@@ -4,7 +4,7 @@ import { PreCheckoutQuery, ShippingQuery } from "../payments/objects.ts";
 import { Update } from "./objects.ts";
 
 export enum UpdateType {
-  Error = "ERROR_UPDATE",
+  Error = "UPDATE_ERROR",
   Message = "MESSAGE_UPDATE",
   EditedMessage = "EDITED_MESSAGE_UPDATE",
   ChannelPost = "CHANNEL_POST_UPDATE",
@@ -26,18 +26,18 @@ interface BaseUpdate {
   update_id: number;
 }
 
-export interface ErrorUpdate {
+export interface UpdateError {
   error: Error;
 }
 
-export class ErrorUpdateEvent extends Event {
-  constructor(public readonly error: ErrorUpdate) {
+export class UpdateErrorEvent extends Event {
+  constructor(public readonly error: UpdateError) {
     super(UpdateType.Error);
   }
 }
 
-export function isErrorUpdateEvent(event: Event): event is ErrorUpdateEvent {
-  return !!(event as ErrorUpdateEvent).error;
+export function isErrorUpdateEvent(event: Event): event is UpdateErrorEvent {
+  return !!(event as UpdateErrorEvent).error;
 }
 
 export interface MessageUpdate extends BaseUpdate {
