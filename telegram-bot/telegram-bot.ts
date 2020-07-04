@@ -113,7 +113,7 @@ export class TelegramBot extends TelegramApi {
   /** @deprecated */
   startPolling(params: PollingOptions = {}) {
     console.warn(
-      "startPolling will removed after 06 Aug 2020. Pls, use run instead",
+      "startPolling will removed after 06 Jul 2020. Pls, use `run` instead",
     );
     this.run({
       polling: params,
@@ -123,7 +123,7 @@ export class TelegramBot extends TelegramApi {
   /** @deprecated */
   stopPolling() {
     console.warn(
-      "stopPolling will removed after 06 Aug 2020. Pls, use stop instead",
+      "stopPolling will removed after 06 Jul 2020. Pls, use `stop` instead",
     );
     this.stop();
   }
@@ -161,10 +161,15 @@ export class TelegramBot extends TelegramApi {
     }
   }
 
+  /** Handles update object from Telegram */
+  handleUpdate(update: Update) {
+    const updateEvent = toUpdateEvent(update);
+    this.updatesEventTarget.dispatchEvent(updateEvent);
+  }
+
   private handleUpdates(updates: Update[]) {
     for (const update of updates) {
-      const updateEvent = toUpdateEvent(update);
-      this.updatesEventTarget.dispatchEvent(updateEvent);
+      this.handleUpdate(update);
     }
   }
 }

@@ -3,7 +3,7 @@ import { PollingOptions } from "./polling.ts";
 import { WebhookServerOptions } from "./webhook-server.ts";
 
 export type UpdatesCallback = (
-  updates: Update[] | undefined,
+  updates?: Update[],
   error?: Error,
 ) => void;
 

@@ -1,14 +1,14 @@
 # deno-telegram-bot-api
-🦕 wrapper for Telegram bot API 
+🦕 wrapper for Telegram Bot API 
 
 ## Features
 - Fully typed API follows official [Telegram API](https://core.telegram.org/bots/api) 
-with minimal domain specific knowledge required
-- Pooling and Webhook server for getting updates
+- Minimal domain-specific knowledge required
+- Polling and Webhook server for getting updates
 
 ## In progress
-- Connect webhook to existing server
 - Sending files
+- Standardize error handling
 - Tests
 
 ## Examples
@@ -48,24 +48,28 @@ bot.on(UpdateType.Message, async ({ message }) => {
 
 ### Webhook
 ```ts
-import { TelegramBot, UpdateType } from 'https://deno.land/x/telegram_bot_api/mod.ts';
+import {
+  TelegramBot,
+  UpdateType,
+} from "https://deno.land/x/telegram_bot_api/mod.ts";
 
 const TOKEN = ""; // bot token
 const bot = new TelegramBot(TOKEN);
 
 // for dev purposes you can use services like https://serveo.net/#manual
-// ssh -R 80:localhost:3000 serveo.net - provides proxying requests from public HTTPS server to localhost:3000
+// e.g.: ssh -R 80:localhost:3000 serveo.net - proxying requests from public HTTPS server to localhost:3000
 
 // @see https://core.telegram.org/bots/api#setwebhook
 bot.setWebhook({
-  url: `https://your-url-from-serveo`,
+  url: `https://your-serveo-url.com/${TOKEN}`, // token as pathname is recommended
 });
 
-// start Deno Server on port 3000
-// hostname defaults to localhost
+// start Deno server on port 3000
 bot.run({
   webhook: {
+    // hostname: 0.0.0.0 - defaults to localhost
     port: 3000,
+    pathname: `/${TOKEN}`,
   },
 });
 
@@ -74,9 +78,57 @@ bot.on(UpdateType.Message, async ({ message }) => {
 
   await bot.sendMessage({
     chat_id: chatId,
-    text: 'There is no 🥄',
+    text: "There is no 🥄",
   });
 });
+
+bot.on(
+  UpdateType.Error,
+  (({ error }) => {
+    console.log(error);
+  }),
+);
+```
+
+### Webhook with [oak](https://github.com/oakserver/oak)
+```ts
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import {
+  TelegramBot,
+  UpdateType,
+} from "https://deno.land/x/telegram_bot_api/mod.ts";
+
+const TOKEN = ""; // bot token
+const bot = new TelegramBot(TOKEN);
+
+bot.setWebhook({
+  url: `https://your-serveo-url.com/${TOKEN}`, // token as pathname is recommended
+});
+
+bot.on(UpdateType.Message, async ({ message }) => {
+  const { chat: { id }, text = '🙈' } = message;
+
+  await bot.sendMessage({
+    chat_id: id,
+    text,
+  });
+});
+
+const router = new Router();
+
+// listen on path provided in `setWebhook` method
+router.post(`/${TOKEN}`, async (context) => {
+  const { value } = await context.request.body();
+  bot.handleUpdate(value); // use with any existing server to handle update
+  context.response.status = 200;
+});
+
+const app = new Application();
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+await app.listen({ port: 3000 });
+
 
 ```
 
