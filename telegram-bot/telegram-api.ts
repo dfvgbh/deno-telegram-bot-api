@@ -257,6 +257,7 @@ export abstract class TelegramApi {
         if (body.ok) {
           return body.result;
         } else {
+          // TODO: handle ResponseParameters https://core.telegram.org/bots/api#responseparameters
           const { error_code, description } = body;
           throw new Error(`${error_code}\n${description}`);
         }
