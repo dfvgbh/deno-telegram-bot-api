@@ -6,7 +6,7 @@ import {
 const TOKEN = ""; // bot token
 const bot = new TelegramBot(TOKEN);
 
-// for dev purposes you can use services like https://serveo.net/#manual
+// for dev purposes you can use services like https://serveo.net
 // e.g.: ssh -R 80:localhost:3000 serveo.net - proxying requests from public HTTPS server to localhost:3000
 
 // @see https://core.telegram.org/bots/api#setwebhook

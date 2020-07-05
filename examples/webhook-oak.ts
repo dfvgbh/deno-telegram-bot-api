@@ -12,7 +12,7 @@ bot.setWebhook({
 });
 
 bot.on(UpdateType.Message, async ({ message }) => {
-  const { chat: { id }, text = '🙈' } = message;
+  const { chat: { id }, text = "🙈" } = message;
 
   await bot.sendMessage({
     chat_id: id,
