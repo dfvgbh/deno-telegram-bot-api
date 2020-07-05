@@ -333,19 +333,52 @@ export interface InlineKeyboardMarkup {
   inline_keyboard: InlineKeyboardButton[][];
 }
 
-//TODO: split to separate interfaces (or better solution) to require only one of optional properties
 /**
  * @see https://core.telegram.org/bots/api#inlinekeyboardbutton
  */
-export interface InlineKeyboardButton {
+export type InlineKeyboardButton =
+  | InlineKeyboardUrlButton
+  | InlineKeyboardLoginUrlButton
+  | InlineKeyboardCallbackDataButton
+  | InlineKeyboardSwitchInlineQueryButton
+  | InlineKeyboardSwitchInlineQueryCurrentChatButton
+  | InlineKeyboardCallbackGameButton
+  | InlineKeyboardPayButton;
+
+interface BaseInlineKeyboardButton {
   text: string;
-  url?: string;
-  login_url?: LoginUrl;
-  callback_data?: string;
-  switch_inline_query?: string;
-  switch_inline_query_current_chat?: string;
-  callback_game?: CallbackGame;
-  pay?: boolean;
+}
+
+export interface InlineKeyboardUrlButton extends BaseInlineKeyboardButton {
+  url: string;
+}
+
+export interface InlineKeyboardLoginUrlButton extends BaseInlineKeyboardButton {
+  login_url: LoginUrl;
+}
+
+export interface InlineKeyboardCallbackDataButton
+  extends BaseInlineKeyboardButton {
+  callback_data: string;
+}
+
+export interface InlineKeyboardSwitchInlineQueryButton
+  extends BaseInlineKeyboardButton {
+  switch_inline_query: string;
+}
+
+export interface InlineKeyboardSwitchInlineQueryCurrentChatButton
+  extends BaseInlineKeyboardButton {
+  switch_inline_query_current_chat: string;
+}
+
+export interface InlineKeyboardCallbackGameButton
+  extends BaseInlineKeyboardButton {
+  callback_game: CallbackGame;
+}
+
+export interface InlineKeyboardPayButton extends BaseInlineKeyboardButton {
+  pay: boolean;
 }
 
 /**
