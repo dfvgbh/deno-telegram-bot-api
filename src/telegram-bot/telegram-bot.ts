@@ -25,7 +25,7 @@ import {
 import {
   WebhookServer,
 } from "../updates-strategy/webhook-server.ts";
-import { toUpdateEvent } from "./helpers.ts";
+import { toUpdateEvent } from "./utils.ts";
 import {
   isRunWithPollingOptions,
   isRunWithWebhookOptions,
@@ -108,24 +108,6 @@ export class TelegramBot extends TelegramApi {
         callback(event.payload);
       },
     });
-  }
-
-  /** @deprecated */
-  startPolling(params: PollingOptions = {}) {
-    console.warn(
-      "startPolling will removed after 06 Jul 2020. Pls, use `run` instead",
-    );
-    this.run({
-      polling: params,
-    });
-  }
-
-  /** @deprecated */
-  stopPolling() {
-    console.warn(
-      "stopPolling will removed after 06 Jul 2020. Pls, use `stop` instead",
-    );
-    this.stop();
   }
 
   run(options: RunWithPollingOptions): void;
