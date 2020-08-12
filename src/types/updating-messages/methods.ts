@@ -9,6 +9,7 @@ import {
   Message,
   Poll,
 } from "../common/objects.ts";
+import { Attachments } from "../utils.ts";
 
 /**
  * @see https://core.telegram.org/bots/api#editmessagetext
@@ -38,13 +39,16 @@ export type EditMessageCaption = (params: {
 /**
  * @see https://core.telegram.org/bots/api#editmessagemedia
  */
-export type EditMessageMedia = (params: {
-  chat_id?: number | string;
-  message_id?: number;
-  inline_message_id?: string;
-  media: InputMedia;
-  reply_markup?: InlineKeyboardMarkup;
-}) => Promise<Message | true>;
+export type EditMessageMedia = (
+  params: FormData | {
+    chat_id?: number | string;
+    message_id?: number;
+    inline_message_id?: string;
+    media: InputMedia;
+    reply_markup?: InlineKeyboardMarkup;
+    attachments?: Attachments;
+  },
+) => Promise<Message | true>;
 
 /**
  * @see https://core.telegram.org/bots/api#editmessagereplymarkup

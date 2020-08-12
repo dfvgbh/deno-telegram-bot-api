@@ -68,3 +68,28 @@ export function toUpdateEvent(
 export function makeEndpoint(token: string, methodName: string) {
   return `https://api.telegram.org/bot${token}/${methodName}`;
 }
+
+export function buildFormData(initObject: { [key: string]: any }) {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries(initObject)) {
+    if (
+      typeof value === "object" && value !== null &&
+      !(value instanceof Blob)
+    ) {
+      formData.append(key, JSON.stringify(value));
+      continue;
+    }
+    formData.append(key, value);
+  }
+
+  return formData;
+}
+
+export function isBlob(value: unknown): value is Blob {
+  return value instanceof Blob;
+}
+
+export function isFormData(value: unknown): value is FormData {
+  return value instanceof FormData;
+}

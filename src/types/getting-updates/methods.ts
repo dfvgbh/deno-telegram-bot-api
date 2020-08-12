@@ -19,12 +19,14 @@ export type GetUpdates = (params: {
 /**
  * @see https://core.telegram.org/bots/api#setwebhook
  */
-export type SetWebhook = (params: {
-  url: string;
-  certificate?: InputFile;
-  max_connections?: number;
-  allowed_updates?: string[];
-}) => Promise<true>;
+export type SetWebhook = (
+  params: FormData | {
+    url: string;
+    certificate?: InputFile;
+    max_connections?: number;
+    allowed_updates?: string[];
+  },
+) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#deletewebhook

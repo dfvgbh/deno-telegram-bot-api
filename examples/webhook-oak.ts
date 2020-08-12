@@ -8,7 +8,7 @@ const TOKEN = ""; // bot token
 const bot = new TelegramBot(TOKEN);
 
 bot.setWebhook({
-  url: `https://your-serveo-url.com/${TOKEN}`, // token as pathname is recommended
+  url: `https://your-burrow-url.io/${TOKEN}`, // token as pathname is recommended
 });
 
 bot.on(UpdateType.Message, async ({ message }) => {
@@ -22,9 +22,8 @@ bot.on(UpdateType.Message, async ({ message }) => {
 
 const router = new Router();
 
-// listen on path provided in `setWebhook` method
 router.post(`/${TOKEN}`, async (context) => {
-  const { value } = await context.request.body();
+  const value = await context.request.body().value;
   bot.handleUpdate(value); // use with any existing server to handle update
   context.response.status = 200;
 });

@@ -6,12 +6,13 @@ import {
 const TOKEN = ""; // bot token
 const bot = new TelegramBot(TOKEN);
 
-// for dev purposes you can use services like https://serveo.net
-// e.g.: ssh -R 80:localhost:3000 serveo.net - proxying requests from public HTTPS server to localhost:3000
+// as using webhooks requires public HTTPS server, proxying requests from such
+// public server to localhost is a good alternative.
+// e.g. https://burrow.io - for dev purposes
 
 // @see https://core.telegram.org/bots/api#setwebhook
 bot.setWebhook({
-  url: `https://your-serveo-url.com/${TOKEN}`, // token as pathname is recommended
+  url: `https://your-burrow-url.io/${TOKEN}`, // token as pathname is recommended
 });
 
 // start Deno server on port 3000
@@ -35,6 +36,6 @@ bot.on(UpdateType.Message, async ({ message }) => {
 bot.on(
   UpdateType.Error,
   (({ error }) => {
-    console.log(error);
+    console.error(error);
   }),
 );

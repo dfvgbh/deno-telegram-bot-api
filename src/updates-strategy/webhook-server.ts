@@ -25,7 +25,7 @@ export class WebhookServer implements UpdatesStrategy {
       this.server = serve(httpOptions);
 
       for await (const req of this.server) {
-        if (req.url !== pathname) return;
+        if (req.url !== pathname) continue;
 
         const rawBody = await Deno.readAll(req.body);
         const decoded = this.decoder.decode(rawBody);

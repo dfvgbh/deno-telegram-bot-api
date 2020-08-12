@@ -491,7 +491,7 @@ export type InputMedia =
  * @see https://core.telegram.org/bots/api#inputmediaphoto
  */
 export interface InputMediaPhoto {
-  type: string;
+  type: "photo";
   media: string;
   caption?: string;
   parse_mode?: string;
@@ -501,9 +501,9 @@ export interface InputMediaPhoto {
  * @see https://core.telegram.org/bots/api#inputmediavideo
  */
 export interface InputMediaVideo {
-  type: string;
+  type: "video";
   media: string;
-  thumb?: InputFile | string;
+  thumb?: string;
   caption?: string;
   parse_mode?: string;
   width?: number;
@@ -516,9 +516,9 @@ export interface InputMediaVideo {
  * @see https://core.telegram.org/bots/api#inputmediaanimation
  */
 export interface InputMediaAnimation {
-  type: string;
+  type: "animation";
   media: string;
-  thumb?: InputFile | string;
+  thumb?: string;
   caption?: string;
   parse_mode?: string;
   width?: number;
@@ -530,9 +530,9 @@ export interface InputMediaAnimation {
  * @see https://core.telegram.org/bots/api#inputmediaaudio
  */
 export interface InputMediaAudio {
-  type: string;
+  type: "audio";
   media: string;
-  thumb?: InputFile | string;
+  thumb?: string;
   caption?: string;
   parse_mode?: string;
   duration?: number;
@@ -544,15 +544,14 @@ export interface InputMediaAudio {
  * @see https://core.telegram.org/bots/api#inputmediadocument
  */
 export interface InputMediaDocument {
-  type: string;
+  type: "document";
   media: string;
-  thumb?: InputFile | string;
+  thumb?: string;
   caption?: string;
   parse_mode?: string;
 }
 
-// TODO: investigate about type, probably should be a string
 /**
  * @see https://core.telegram.org/bots/api#inputfile
  */
-export type InputFile = any;
+export type InputFile = Blob;

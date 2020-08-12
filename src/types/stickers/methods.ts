@@ -17,17 +17,19 @@ import { MaskPosition, StickerSet } from "./objects.ts";
 /**
  * @see https://core.telegram.org/bots/api#sendsticker
  */
-export type SendSticker = (params: {
-  chat_id: number | string;
-  sticker: InputFile | string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendSticker = (
+  params: FormData | {
+    chat_id: number | string;
+    sticker: InputFile | string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#getstickerset
@@ -39,36 +41,42 @@ export type GetStickerSet = (params: {
 /**
  * @see https://core.telegram.org/bots/api#uploadstickerfile
  */
-export type UploadStickerFile = (params: {
-  user_id: number;
-  png_sticker: InputFile;
-}) => Promise<File>;
+export type UploadStickerFile = (
+  params: FormData | {
+    user_id: number;
+    png_sticker: InputFile;
+  },
+) => Promise<File>;
 
 /**
  * @see https://core.telegram.org/bots/api#createnewstickerset
  */
-export type CreateNewStickerSet = (params: {
-  user_id: number;
-  name: string;
-  title: string;
-  png_sticker?: InputFile | string;
-  tgs_sticker?: InputFile;
-  emojis: string;
-  contains_masks?: boolean;
-  mask_position?: MaskPosition;
-}) => Promise<true>;
+export type CreateNewStickerSet = (
+  params: FormData | {
+    user_id: number;
+    name: string;
+    title: string;
+    png_sticker?: InputFile | string;
+    tgs_sticker?: InputFile;
+    emojis: string;
+    contains_masks?: boolean;
+    mask_position?: MaskPosition;
+  },
+) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#addstickertoset
  */
-export type AddStickerToSet = (params: {
-  user_id: number;
-  name: string;
-  png_sticker?: InputFile | string;
-  tgs_sticker?: InputFile;
-  emojis: string;
-  mask_position?: MaskPosition;
-}) => Promise<true>;
+export type AddStickerToSet = (
+  params: FormData | {
+    user_id: number;
+    name: string;
+    png_sticker?: InputFile | string;
+    tgs_sticker?: InputFile;
+    emojis: string;
+    mask_position?: MaskPosition;
+  },
+) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#setstickerpositioninset
@@ -88,8 +96,10 @@ export type DeleteStickerFromSet = (params: {
 /**
  * @see https://core.telegram.org/bots/api#setstickersetthumb
  */
-export type SetStickerSetThumb = (params: {
-  name: string;
-  user_id: number;
-  thumb?: InputFile | string;
-}) => Promise<true>;
+export type SetStickerSetThumb = (
+  params: FormData | {
+    name: string;
+    user_id: number;
+    thumb?: InputFile | string;
+  },
+) => Promise<true>;

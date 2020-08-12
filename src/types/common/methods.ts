@@ -3,6 +3,7 @@
  * @see https://core.telegram.org/bots/api#available-methods
  */
 
+import { Attachments } from "../utils.ts";
 import {
   BotCommand,
   Chat,
@@ -70,147 +71,169 @@ export type ForwardMessage = (params: {
 /**
  * @see https://core.telegram.org/bots/api#sendphoto
  */
-export type SendPhoto = (params: {
-  chat_id: number | string;
-  photo: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendPhoto = (
+  params: FormData | {
+    chat_id: number | string;
+    photo: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendaudio
  */
-export type SendAudio = (params: {
-  chat_id: number | string;
-  audio: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  duration?: number;
-  performer?: string;
-  title?: string;
-  thumb?: InputFile | string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendAudio = (
+  params: FormData | {
+    chat_id: number | string;
+    audio: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    duration?: number;
+    performer?: string;
+    title?: string;
+    thumb?: InputFile | string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#senddocument
  */
-export type SendDocument = (params: {
-  chat_id: number | string;
-  document: InputFile | string;
-  thumb?: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendDocument = (
+  params: FormData | {
+    chat_id: number | string;
+    document: InputFile | string;
+    thumb?: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendvideo
  */
-export type SendVideo = (params: {
-  chat_id: number | string;
-  video: InputFile | string;
-  duration?: number;
-  width?: number;
-  height?: number;
-  thumb?: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  supports_streaming?: boolean;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendVideo = (
+  params: FormData | {
+    chat_id: number | string;
+    video: InputFile | string;
+    duration?: number;
+    width?: number;
+    height?: number;
+    thumb?: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    supports_streaming?: boolean;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendanimation
  */
-export type SendAnimation = (params: {
-  chat_id: number | string;
-  animation: InputFile | string;
-  duration?: number;
-  width?: number;
-  height?: number;
-  thumb?: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendAnimation = (
+  params: FormData | {
+    chat_id: number | string;
+    animation: InputFile | string;
+    duration?: number;
+    width?: number;
+    height?: number;
+    thumb?: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendvoice
  */
-export type SendVoice = (params: {
-  chat_id: number | string;
-  voice: InputFile | string;
-  caption?: string;
-  parse_mode?: string;
-  duration?: number;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendVoice = (
+  params: FormData | {
+    chat_id: number | string;
+    voice: InputFile | string;
+    caption?: string;
+    parse_mode?: string;
+    duration?: number;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendvideonote
  */
-export type SendVideoNote = (params: {
-  chat_id: number | string;
-  video_note: InputFile | string;
-  duration?: number;
-  length?: number;
-  thumb?: InputFile | string;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}) => Promise<Message>;
+export type SendVideoNote = (
+  params: FormData | {
+    chat_id: number | string;
+    video_note: InputFile | string;
+    duration?: number;
+    length?: number;
+    thumb?: InputFile | string;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendmediagroup
  */
-export type SendMediaGroup = (params: {
-  chat_id: number | string;
-  media: (InputMediaPhoto | InputMediaVideo)[];
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-}) => Promise<Message>;
+export type SendMediaGroup = (
+  params: FormData | {
+    chat_id: number | string;
+    media: (InputMediaPhoto | InputMediaVideo)[];
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
+    attachments?: Attachments;
+  },
+) => Promise<Message>;
 
 /**
  * @see https://core.telegram.org/bots/api#sendlocation
@@ -433,10 +456,12 @@ export type ExportChatInviteLink = (params: {
 /**
  * @see https://core.telegram.org/bots/api#setchatphoto
  */
-export type SetChatPhoto = (params: {
-  chat_id: number | string;
-  photo: InputFile;
-}) => Promise<true>;
+export type SetChatPhoto = (
+  params: FormData | {
+    chat_id: number | string;
+    photo: InputFile;
+  },
+) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#deletechatphoto
