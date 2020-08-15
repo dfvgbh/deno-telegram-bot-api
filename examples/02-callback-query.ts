@@ -1,9 +1,23 @@
+/**
+ * Run this example from the shell!
+ * MacOS, Linux $:
+ * TOKEN=your-bot-token deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/02-callback-query.ts
+ * Windows $:
+ * set TOKEN=your-bot-token && deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/02-callback-query.ts
+ */
+
 import {
   TelegramBot,
   UpdateType,
 } from "https://deno.land/x/telegram_bot_api/mod.ts";
 
-const TOKEN = ""; // bot token
+/**
+ * This example shows how to setup inline keyboard with buttons, and then handle
+ * user choice via `callbackquery` Telegram mechanism.
+ */
+
+const TOKEN = Deno.env.get("TOKEN");
+if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);
 
 bot.run({
@@ -13,7 +27,6 @@ bot.run({
 bot.on(UpdateType.Message, async ({ message }) => {
   const chatId = message.chat.id;
 
-  // send message with keyboard
   await bot.sendMessage({
     chat_id: chatId,
     text: "Chose a pill",

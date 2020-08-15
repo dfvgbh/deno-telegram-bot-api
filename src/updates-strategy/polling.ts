@@ -4,27 +4,18 @@ import { UpdatesCallback, UpdatesStrategy } from "./updates-strategy.ts";
 
 export type PollingOptions = Parameters<GetUpdates>[0];
 
-const DEFAULT_POLLING_OPTIONS: PollingOptions = {
-  timeout: 15,
-};
-
 export class Polling implements UpdatesStrategy {
   private isActive = false;
-  private options: PollingOptions = {
-    ...DEFAULT_POLLING_OPTIONS,
-  };
+  private options: PollingOptions = {};
   private updatesCallback?: UpdatesCallback;
 
   constructor(private readonly telegramBot: TelegramBot) {}
 
-  run(updatesCallback: UpdatesCallback, options: PollingOptions = {}) {
+  run(updatesCallback: UpdatesCallback, options: PollingOptions) {
     this.stop();
     this.isActive = true;
     this.updatesCallback = updatesCallback;
-    this.options = {
-      ...this.options,
-      ...options,
-    };
+    this.options = options;
 
     return this.poll();
   }
