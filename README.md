@@ -9,7 +9,7 @@
 
 ## Examples
 
-The following example of a bot, which responds with a file containing user message inside.
+The example of bot which responds with a file containing user message inside.
 
 ```ts
 const TOKEN = Deno.env.get("TOKEN");
@@ -29,7 +29,7 @@ bot.on(UpdateType.Message, async ({ message }) => {
 });
 ```
 
-Run this example on the spot from the shell:
+Let's run the example above right from the terminal:
 ```shell script
 # MacOS, Linux
 TOKEN=your-bot-token deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/sending-files/01-simple-media.ts

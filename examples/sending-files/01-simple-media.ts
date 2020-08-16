@@ -28,7 +28,7 @@ bot.run({
 });
 
 bot.on(UpdateType.Message, async ({ message }) => {
-  const text = message.text || "Are you talking to me?";
+  const text = message.text || "I can't hear you";
   await bot.sendDocument({
     chat_id: message.chat.id,
     document: new File([text], "echo.txt"),
