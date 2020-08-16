@@ -35,6 +35,10 @@ import {
 } from "./run-options.ts";
 import { TelegramApi } from "./telegram-api.ts";
 
+const DEFAULT_POLLING_OPTIONS: PollingOptions = {
+  timeout: 30,
+};
+
 export class TelegramBot extends TelegramApi {
   private readonly updatesEventTarget = new EventTarget();
   private updatesStrategy?: UpdatesStrategy;
@@ -125,7 +129,7 @@ export class TelegramBot extends TelegramApi {
 
     if (isRunWithPollingOptions(options)) {
       const pollingOptions = options.polling === true
-        ? undefined
+        ? DEFAULT_POLLING_OPTIONS
         : options.polling;
       this.updatesStrategy = new Polling(this);
       return this.updatesStrategy.run(updatesCallback, pollingOptions);
