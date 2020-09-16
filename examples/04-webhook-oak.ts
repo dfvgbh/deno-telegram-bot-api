@@ -1,5 +1,5 @@
 /**
- * Run this example from the shell!
+ * Run the example right from the terminal
  * MacOS, Linux $:
  * TOKEN=your-bot-token WEBHOOK_URL=webhook-url PORT=3000 deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/04-webhook-oak.ts
  * Windows $:
@@ -23,8 +23,7 @@ if (!TOKEN) throw new Error("Bot token is not provided");
 const WEBHOOK_URL = Deno.env.get("WEBHOOK_URL");
 if (!WEBHOOK_URL) throw new Error("Webhook url is not provided");
 
-const PORT = parseInt(Deno.env.get("PORT") || '') || 3000;
-
+const PORT = parseInt(Deno.env.get("PORT") || "") || 3000;
 const bot = new TelegramBot(TOKEN);
 
 bot.setWebhook({

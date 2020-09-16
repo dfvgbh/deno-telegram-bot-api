@@ -1,5 +1,5 @@
 /**
- * Run this example from the shell!
+ * Run the example right from the terminal
  * MacOS, Linux $:
  * TOKEN=your-bot-token WEBHOOK_URL=webhook-url PORT=3000 deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/03-webhook.ts
  * Windows $:
@@ -25,9 +25,17 @@ if (!TOKEN) throw new Error("Bot token is not provided");
 const WEBHOOK_URL = Deno.env.get("WEBHOOK_URL");
 if (!WEBHOOK_URL) throw new Error("Webhook url is not provided");
 
-const PORT = parseInt(Deno.env.get("PORT") || '') || 3000;
-
+const PORT = parseInt(Deno.env.get("PORT") || "") || 3000;
 const bot = new TelegramBot(TOKEN);
+
+bot.on(UpdateType.Message, async ({ message }) => {
+  const chatId = message.chat.id;
+
+  await bot.sendMessage({
+    chat_id: chatId,
+    text: "There is no 🥄",
+  });
+});
 
 bot.setWebhook({
   url: `${WEBHOOK_URL}/${TOKEN}`,
@@ -39,17 +47,3 @@ bot.run({
     pathname: `/${TOKEN}`,
   },
 });
-
-bot.on(UpdateType.Message, async ({ message }) => {
-  const chatId = message.chat.id;
-
-  await bot.sendMessage({
-    chat_id: chatId,
-    text: "There is no 🥄",
-  });
-});
-
-bot.on(
-  UpdateType.Error,
-  ({ error }) => console.error("Glitch in the Matrix", error.stack),
-);
