@@ -20,6 +20,7 @@ import {
  *   timeout: 30,
  * }
  */
+
 const TOKEN = Deno.env.get("TOKEN");
 if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);

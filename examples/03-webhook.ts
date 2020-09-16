@@ -25,7 +25,7 @@ if (!TOKEN) throw new Error("Bot token is not provided");
 const WEBHOOK_URL = Deno.env.get("WEBHOOK_URL");
 if (!WEBHOOK_URL) throw new Error("Webhook url is not provided");
 
-const PORT = parseInt(Deno.env.get("PORT") || '') || 3000;
+const PORT = parseInt(Deno.env.get("PORT") || "") || 3000;
 const bot = new TelegramBot(TOKEN);
 
 bot.on(UpdateType.Message, async ({ message }) => {
