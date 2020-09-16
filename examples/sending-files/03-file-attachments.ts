@@ -1,5 +1,5 @@
 /**
- * Run this example from the shell!
+ * Run the example from the shell
  * MacOS, Linux $:
  * TOKEN=your-bot-token deno run --allow-net --allow-env --allow-read https://deno.land/x/telegram_bot_api/examples/sending-files/03-file-attachments.ts
  * Windows $:
@@ -21,10 +21,6 @@ const TOKEN = Deno.env.get("TOKEN");
 if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);
 
-bot.run({
-  polling: true,
-});
-
 bot.on(UpdateType.Message, async ({ message }) => {
   const logo = await Deno.readFile("examples/sending-files/logo.png");
 
@@ -36,4 +32,8 @@ bot.on(UpdateType.Message, async ({ message }) => {
       logo: new Blob([logo.buffer]),
     },
   });
+});
+
+bot.run({
+  polling: true,
 });

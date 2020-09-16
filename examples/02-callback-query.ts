@@ -1,5 +1,5 @@
 /**
- * Run this example from the shell!
+ * Run the example from the shell
  * MacOS, Linux $:
  * TOKEN=your-bot-token deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/02-callback-query.ts
  * Windows $:
@@ -19,10 +19,6 @@ import {
 const TOKEN = Deno.env.get("TOKEN");
 if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);
-
-bot.run({
-  polling: true,
-});
 
 bot.on(UpdateType.Message, async ({ message }) => {
   const chatId = message.chat.id;
@@ -59,3 +55,7 @@ bot.on(
   UpdateType.Error,
   ({ error }) => console.error("Glitch in the Matrix", error.stack),
 );
+
+bot.run({
+  polling: true,
+});

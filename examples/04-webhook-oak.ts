@@ -1,5 +1,5 @@
 /**
- * Run this example from the shell!
+ * Run the example from the shell
  * MacOS, Linux $:
  * TOKEN=your-bot-token WEBHOOK_URL=webhook-url PORT=3000 deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/04-webhook-oak.ts
  * Windows $:
