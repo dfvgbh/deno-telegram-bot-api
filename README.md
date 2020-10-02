@@ -11,7 +11,7 @@
 
 For all examples check the [examples directory](https://github.com/dfvgbh/deno-telegram-bot-api/tree/master/examples)
 
-The example of a bot that responds with a file containing a user message inside.
+The example of a bot that replies with a file containing a user message inside.
 
 ```ts
 import { TelegramBot, UpdateType } from "https://deno.land/x/telegram_bot_api/mod.ts"
