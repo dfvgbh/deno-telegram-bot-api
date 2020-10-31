@@ -42,7 +42,7 @@ TOKEN=your-bot-token deno run --allow-net --allow-env https://deno.land/x/telegr
 ```
 ```shell script
 # Windows
-set TOKEN=your-bot-token && deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/sending-files/01-simple-media.ts
+cmd /c "set TOKEN=your-bot-token && deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/sending-files/01-simple-media.ts"
 ```
 
 ## In progress
