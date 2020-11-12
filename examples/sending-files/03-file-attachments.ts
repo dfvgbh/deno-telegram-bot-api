@@ -1,5 +1,5 @@
 /**
- * Run the example right from the terminal
+ * Try the example right from the terminal
  * MacOS, Linux $:
  * TOKEN=your-bot-token deno run --allow-net --allow-env --allow-read https://deno.land/x/telegram_bot_api/examples/sending-files/03-file-attachments.ts
  * Windows $:

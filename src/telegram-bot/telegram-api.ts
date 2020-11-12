@@ -81,12 +81,7 @@ import {
   EditMessageText,
   StopPoll,
 } from "../types/updating-messages/methods.ts";
-import {
-  buildFormData,
-  isBlob,
-  isFormData,
-  makeEndpoint,
-} from "./utils.ts";
+import { buildFormData, isBlob, isFormData, makeEndpoint } from "./utils.ts";
 
 export abstract class TelegramApi {
   constructor(private readonly token: string) {}
