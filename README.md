@@ -1,6 +1,8 @@
 # deno-telegram-bot-api
 🦕 wrapper for Telegram Bot API 
 
+Join Discord channel https://discord.gg/8PbtQq
+
 ## Features
 - Fully typed API follows the latest official [Telegram API](https://core.telegram.org/bots/api) (v4.9)
 - Minimal domain-specific knowledge required
@@ -11,7 +13,7 @@
 
 For all examples check the [examples directory](https://github.com/dfvgbh/deno-telegram-bot-api/tree/master/examples)
 
-The example of a bot which replies with a file containing a user message inside.
+The example of a bot which responds with a file containing a user message inside.
 
 ```ts
 import { TelegramBot, UpdateType } from "https://deno.land/x/telegram_bot_api/mod.ts"
