@@ -1,5 +1,5 @@
 export * from "./src/telegram-bot/telegram-bot.ts";
-export {
+export type {
   RunOptions,
   RunWithPollingOptions,
   RunWithWebhookOptions,

@@ -22,9 +22,7 @@ import {
   UpdatesCallback,
   UpdatesStrategy,
 } from "../updates-strategy/updates-strategy.ts";
-import {
-  WebhookServer,
-} from "../updates-strategy/webhook-server.ts";
+import { WebhookServer } from "../updates-strategy/webhook-server.ts";
 import { toUpdateEvent } from "./utils.ts";
 import {
   isRunWithPollingOptions,

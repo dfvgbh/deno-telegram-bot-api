@@ -1,9 +1,9 @@
 import { UpdatesCallback } from "./updates-strategy.ts";
 import { UpdatesStrategy } from "./updates-strategy.ts";
 import {
+  HTTPOptions,
   serve,
   Server,
-  HTTPOptions,
 } from "https://deno.land/std/http/server.ts";
 
 export interface WebhookServerOptions extends HTTPOptions {
