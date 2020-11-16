@@ -13,9 +13,9 @@ import {
 
 /**
  * This example shows how to run bot using long polling mechanism.
- * Polling parameter accepts the same options like described in docs
+ * Polling parameter accepts the same parameters like described in docs
  * @see https://core.telegram.org/bots/api#getupdates.
- * Or just pass `true`, then polling will be run with bot default options:
+ * Or just pass `true`, then polling will be run with bot default parameters:
  * {
  *   timeout: 30,
  * }
@@ -26,7 +26,6 @@ if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);
 
 // UpdateType supports all telegram update types https://core.telegram.org/bots/api#update
-// callback type matches provided UpdateType
 bot.on(UpdateType.Message, async ({ message }) => {
   const chatId = message.chat.id;
 

@@ -7,6 +7,7 @@ import { CallbackGame, Game } from "../games/objects.ts";
 import { PassportData } from "../passport/objects.ts";
 import { Invoice, SuccessfulPayment } from "../payments/objects.ts";
 import { Sticker } from "../stickers/objects.ts";
+import { DiceEmoji } from "../utils.ts";
 
 /**
  * @see https://core.telegram.org/bots/api#user
@@ -33,7 +34,15 @@ export interface Chat {
   username?: string;
   first_name?: string;
   last_name?: string;
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#chat
+ * extended Chat object used only in getChat method
+ */
+export interface ChatExtended extends Chat {
   photo?: ChatPhoto;
+  bio?: string;
   description?: string;
   invite_link?: string;
   pinned_message?: Message;
@@ -41,6 +50,8 @@ export interface Chat {
   slow_mode_delay?: number;
   sticker_set_name?: string;
   can_set_sticker_set?: boolean;
+  linked_chat_id?: number;
+  location?: ChatLocation;
 }
 
 /**
@@ -49,6 +60,7 @@ export interface Chat {
 export interface Message {
   message_id: number;
   from?: User;
+  sender_chat?: Chat;
   date: number;
   chat: Chat;
   forward_from?: User;
@@ -95,6 +107,7 @@ export interface Message {
   successful_payment?: SuccessfulPayment;
   connected_website?: string;
   passport_data?: PassportData;
+  proximity_alert_triggered?: ProximityAlertTriggered;
   reply_markup?: InlineKeyboardMarkup;
 }
 
@@ -145,6 +158,7 @@ export interface Audio {
   duration: number;
   performer?: string;
   title?: string;
+  file_name?: string;
   mime_type?: string;
   file_size?: number;
   thumb?: PhotoSize;
@@ -172,6 +186,7 @@ export interface Video {
   height: number;
   duration: number;
   thumb?: PhotoSize;
+  file_name?: string;
   mime_type?: string;
   file_size?: number;
 }
@@ -214,7 +229,7 @@ export interface Contact {
  * @see https://core.telegram.org/bots/api#dice
  */
 export interface Dice {
-  emoji: string;
+  emoji: DiceEmoji;
   value: number;
 }
 
@@ -260,6 +275,10 @@ export interface Poll {
 export interface Location {
   longitude: number;
   latitude: number;
+  horizontal_accuracy?: number;
+  live_period?: number;
+  heading?: number;
+  proximity_alert_radius?: number;
 }
 
 /**
@@ -271,6 +290,17 @@ export interface Venue {
   address: string;
   foursquare_id?: string;
   foursquare_type?: string;
+  google_place_id?: string;
+  google_place_type?: string;
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#proximityalerttriggered
+ */
+export interface ProximityAlertTriggered {
+  traveler: User;
+  watcher: User;
+  distance: number;
 }
 
 /**
@@ -429,6 +459,7 @@ export interface ChatMember {
   user: User;
   status: string;
   custom_title?: string;
+  is_anonymous?: boolean;
   until_date?: number;
   can_be_edited?: boolean;
   can_post_messages?: boolean;
@@ -459,6 +490,13 @@ export interface ChatPermissions {
   can_change_info?: boolean;
   can_invite_users?: boolean;
   can_pin_messages?: boolean;
+}
+/**
+ * @see https://core.telegram.org/bots/api#chatlocation
+ */
+export interface ChatLocation {
+  location: Location;
+  address: string;
 }
 
 /**
@@ -495,6 +533,7 @@ export interface InputMediaPhoto {
   media: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
 }
 
 /**
@@ -506,6 +545,7 @@ export interface InputMediaVideo {
   thumb?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   width?: number;
   height?: number;
   duration?: number;
@@ -521,6 +561,7 @@ export interface InputMediaAnimation {
   thumb?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   width?: number;
   height?: number;
   duration?: number;
@@ -535,6 +576,7 @@ export interface InputMediaAudio {
   thumb?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   duration?: number;
   performer?: string;
   title?: string;
@@ -549,6 +591,8 @@ export interface InputMediaDocument {
   thumb?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
+  disable_content_type_detection?: boolean;
 }
 
 /**

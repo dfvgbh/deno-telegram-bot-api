@@ -7,6 +7,7 @@ import {
   InlineKeyboardMarkup,
   InputMedia,
   Message,
+  MessageEntity,
   Poll,
 } from "../common/objects.ts";
 import { Attachments } from "../utils.ts";
@@ -20,6 +21,7 @@ export type EditMessageText = (params: {
   inline_message_id?: string;
   text: string;
   parse_mode?: string;
+  entities?: MessageEntity[];
   disable_web_page_preview?: boolean;
   reply_markup?: InlineKeyboardMarkup;
 }) => Promise<true>;
@@ -33,6 +35,7 @@ export type EditMessageCaption = (params: {
   inline_message_id?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
 }) => Promise<true>;
 

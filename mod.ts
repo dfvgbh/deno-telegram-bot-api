@@ -1,9 +1,9 @@
 export * from "./src/telegram-bot/telegram-bot.ts";
 export type {
-  RunOptions,
-  RunWithPollingOptions,
-  RunWithWebhookOptions,
-} from "./src/telegram-bot/run-options.ts";
+  RunParams,
+  RunWithPollingParams,
+  RunWithWebhookParams,
+} from "./src/telegram-bot/run-params.ts";
 
 export * from "./src/types/common/methods.ts";
 export * from "./src/types/common/objects.ts";
@@ -21,4 +21,5 @@ export * from "./src/types/payments/objects.ts";
 export * from "./src/types/stickers/methods.ts";
 export * from "./src/types/stickers/objects.ts";
 export * from "./src/types/updating-messages/methods.ts";
-export * from "./src/types/methods.ts";
+export * from "./src/types/method.ts";
+export * from "./src/types/utils.ts";

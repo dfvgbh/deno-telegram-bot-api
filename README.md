@@ -4,7 +4,7 @@
 Join Discord channel https://discord.gg/8PbtQq
 
 ## Features
-- Fully typed API follows the latest official [Telegram API](https://core.telegram.org/bots/api) (v4.9)
+- Fully typed API follows the official [Telegram API](https://core.telegram.org/bots/api) (v5.0)
 - Minimal domain-specific knowledge required
 - Polling and Webhook server for getting updates
 - A simple way for sending media files
@@ -44,7 +44,3 @@ TOKEN=your-bot-token deno run --allow-net --allow-env https://deno.land/x/telegr
 # Windows
 set TOKEN=your-bot-token && deno run --allow-net --allow-env https://deno.land/x/telegram_bot_api/examples/sending-files/01-simple-media.ts
 ```
-
-## In progress
-- General error handling for specific cases
-- Tests

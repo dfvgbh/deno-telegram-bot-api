@@ -23,15 +23,21 @@ export type SetWebhook = (
   params: FormData | {
     url: string;
     certificate?: InputFile;
+    ip_address?: string;
     max_connections?: number;
     allowed_updates?: string[];
+    drop_pending_updates?: boolean;
   },
 ) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#deletewebhook
  */
-export type DeleteWebhook = () => Promise<true>;
+export type DeleteWebhook = (
+  params: void | {
+    drop_pending_updates?: boolean;
+  },
+) => Promise<true>;
 
 /**
  * @see https://core.telegram.org/bots/api#getwebhookinfo

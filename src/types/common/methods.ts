@@ -3,19 +3,22 @@
  * @see https://core.telegram.org/bots/api#available-methods
  */
 
-import { Attachments } from "../utils.ts";
+import { Attachments, DiceEmoji } from "../utils.ts";
 import {
   BotCommand,
-  Chat,
+  ChatExtended,
   ChatMember,
   ChatPermissions,
   File,
   ForceReply,
   InlineKeyboardMarkup,
   InputFile,
+  InputMediaAudio,
+  InputMediaDocument,
   InputMediaPhoto,
   InputMediaVideo,
   Message,
+  MessageEntity,
   ReplyKeyboardMarkup,
   ReplyKeyboardRemove,
   User,
@@ -28,12 +31,23 @@ import {
 export type GetMe = () => Promise<User>;
 
 /**
+ * @see https://core.telegram.org/bots/api#logout
+ */
+export type LogOut = () => Promise<true>;
+
+/**
+ * @see https://core.telegram.org/bots/api#close
+ */
+export type Close = () => Promise<true>;
+
+/**
  * @see https://core.telegram.org/bots/api#sendmessage
  */
 export type SendMessage = (params: {
   chat_id: number | string;
   text: string;
   parse_mode?: string;
+  entities?: MessageEntity[];
   disable_web_page_preview?: boolean;
   disable_notification?: boolean;
   reply_to_message_id?: number;
@@ -43,20 +57,6 @@ export type SendMessage = (params: {
     | ReplyKeyboardRemove
     | ForceReply;
 }) => Promise<Message>;
-
-export interface SendMessageParams {
-  chat_id: number | string;
-  text: string;
-  parse_mode?: string;
-  disable_web_page_preview?: boolean;
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-  reply_markup?:
-    | InlineKeyboardMarkup
-    | ReplyKeyboardMarkup
-    | ReplyKeyboardRemove
-    | ForceReply;
-}
 
 /**
  * @see https://core.telegram.org/bots/api#forwardmessage
@@ -69,6 +69,26 @@ export type ForwardMessage = (params: {
 }) => Promise<Message>;
 
 /**
+ * @see https://core.telegram.org/bots/api#copymessage
+ */
+export type CopyMessage = (params: {
+  chat_id: number | string;
+  from_chat_id: number | string;
+  message_id: number;
+  caption?: string;
+  parse_mode?: string;
+  caption_entities?: MessageEntity[];
+  disable_notification?: boolean;
+  reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
+  reply_markup?:
+    | InlineKeyboardMarkup
+    | ReplyKeyboardMarkup
+    | ReplyKeyboardRemove
+    | ForceReply;
+}) => Promise<Message>;
+
+/**
  * @see https://core.telegram.org/bots/api#sendphoto
  */
 export type SendPhoto = (
@@ -77,8 +97,10 @@ export type SendPhoto = (
     photo: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -96,12 +118,14 @@ export type SendAudio = (
     audio: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
     duration?: number;
     performer?: string;
     title?: string;
     thumb?: InputFile | string;
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -121,8 +145,11 @@ export type SendDocument = (
     thumb?: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
+    disable_content_type_detection?: boolean;
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -145,9 +172,11 @@ export type SendVideo = (
     thumb?: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
     supports_streaming?: boolean;
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -170,8 +199,10 @@ export type SendAnimation = (
     thumb?: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -190,9 +221,11 @@ export type SendVoice = (
     voice: InputFile | string;
     caption?: string;
     parse_mode?: string;
+    caption_entities?: MessageEntity[];
     duration?: number;
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -213,6 +246,7 @@ export type SendVideoNote = (
     thumb?: InputFile | string;
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -228,9 +262,13 @@ export type SendVideoNote = (
 export type SendMediaGroup = (
   params: FormData | {
     chat_id: number | string;
-    media: (InputMediaPhoto | InputMediaVideo)[];
+    media:
+      | InputMediaAudio[]
+      | InputMediaDocument[]
+      | (InputMediaPhoto | InputMediaVideo)[];
     disable_notification?: boolean;
     reply_to_message_id?: number;
+    allow_sending_without_reply?: boolean;
     attachments?: Attachments;
   },
 ) => Promise<Message>;
@@ -242,9 +280,13 @@ export type SendLocation = (params: {
   chat_id: number | string;
   latitude: number;
   longitude: number;
+  horizontal_accuracy?: number;
   live_period?: number;
+  heading?: number;
+  proximity_alert_radius?: number;
   disable_notification?: boolean;
   reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
   reply_markup?:
     | InlineKeyboardMarkup
     | ReplyKeyboardMarkup
@@ -261,6 +303,9 @@ export type EditMessageLiveLocation = (params: {
   inline_message_id?: string;
   latitude: number;
   longitude: number;
+  horizontal_accuracy?: number;
+  heading?: number;
+  proximity_alert_radius?: number;
   reply_markup?: InlineKeyboardMarkup;
 }) => Promise<Message | true>;
 
@@ -285,8 +330,11 @@ export type SendVenue = (params: {
   address: string;
   foursquare_id?: string;
   foursquare_type?: string;
+  google_place_id?: string;
+  google_place_type?: string;
   disable_notification?: boolean;
   reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
   reply_markup?:
     | InlineKeyboardMarkup
     | ReplyKeyboardMarkup
@@ -305,6 +353,7 @@ export type SendContact = (params: {
   vcard?: string;
   disable_notification?: boolean;
   reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
   reply_markup?:
     | InlineKeyboardMarkup
     | ReplyKeyboardMarkup
@@ -325,11 +374,13 @@ export type SendPoll = (params: {
   correct_option_id?: number;
   explanation?: string;
   explanation_parse_mode?: string;
+  explanation_entities?: MessageEntity[];
   open_period?: number;
   close_date?: number;
   is_closed?: boolean;
   disable_notification?: boolean;
   reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
   reply_markup?:
     | InlineKeyboardMarkup
     | ReplyKeyboardMarkup
@@ -342,9 +393,10 @@ export type SendPoll = (params: {
  */
 export type SendDice = (params: {
   chat_id: number | string;
-  emoji?: string;
+  emoji?: DiceEmoji;
   disable_notification?: boolean;
   reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
   reply_markup?:
     | InlineKeyboardMarkup
     | ReplyKeyboardMarkup
@@ -401,6 +453,7 @@ export type KickChatMember = (params: {
 export type UnbanChatMember = (params: {
   chat_id: number | string;
   user_id: number;
+  only_if_banned?: boolean;
 }) => Promise<true>;
 
 /**
@@ -419,6 +472,7 @@ export type RestrictChatMember = (params: {
 export type PromoteChatMember = (params: {
   chat_id: number | string;
   user_id: number;
+  is_anonymous?: boolean;
   can_change_info?: boolean;
   can_post_messages?: boolean;
   can_edit_messages?: boolean;
@@ -500,6 +554,14 @@ export type PinChatMessage = (params: {
  */
 export type UnpinChatMessage = (params: {
   chat_id: number | string;
+  message_id?: number;
+}) => Promise<true>;
+
+/**
+ * @see https://core.telegram.org/bots/api#unpinallchatmessages
+ */
+export type UnpinAllChatMessages = (params: {
+  chat_id: number | string;
 }) => Promise<true>;
 
 /**
@@ -514,7 +576,7 @@ export type LeaveChat = (params: {
  */
 export type GetChat = (params: {
   chat_id: number | string;
-}) => Promise<Chat>;
+}) => Promise<ChatExtended>;
 
 /**
  * @see https://core.telegram.org/bots/api#getchatadministrators

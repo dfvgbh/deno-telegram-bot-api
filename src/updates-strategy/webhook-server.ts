@@ -6,7 +6,7 @@ import {
   Server,
 } from "https://deno.land/std/http/server.ts";
 
-export interface WebhookServerOptions extends HTTPOptions {
+export interface WebhookServerParams extends HTTPOptions {
   /** Defaults to `/` */
   pathname?: string;
 }
@@ -16,12 +16,12 @@ export class WebhookServer implements UpdatesStrategy {
   private updatesCallback?: UpdatesCallback;
   private readonly decoder = new TextDecoder();
 
-  async run(updatesCallback: UpdatesCallback, options: WebhookServerOptions) {
+  async run(updatesCallback: UpdatesCallback, params: WebhookServerParams) {
     this.stop();
     this.updatesCallback = updatesCallback;
 
     try {
-      const { pathname = "/", ...httpOptions } = options;
+      const { pathname = "/", ...httpOptions } = params;
       this.server = serve(httpOptions);
 
       for await (const req of this.server) {
