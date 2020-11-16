@@ -1,5 +1,7 @@
 import {
   AnswerCallbackQuery,
+  Close,
+  CopyMessage,
   DeleteChatPhoto,
   DeleteChatStickerSet,
   EditMessageLiveLocation,
@@ -15,6 +17,7 @@ import {
   GetUserProfilePhotos,
   KickChatMember,
   LeaveChat,
+  LogOut,
   PinChatMessage,
   PromoteChatMember,
   RestrictChatMember,
@@ -42,6 +45,7 @@ import {
   SetMyCommands,
   StopMessageLiveLocation,
   UnbanChatMember,
+  UnpinAllChatMessages,
   UnpinChatMessage,
 } from "../types/common/methods.ts";
 import {
@@ -56,7 +60,7 @@ import {
   SetWebhook,
 } from "../types/getting-updates/methods.ts";
 import { AnswerInlineQuery } from "../types/inline-mode/methods.ts";
-import { Method } from "../types/methods.ts";
+import { Method } from "../types/method.ts";
 import { SetPassportDataErrors } from "../types/passport/methods.ts";
 import {
   AnswerPreCheckoutQuery,
@@ -81,18 +85,23 @@ import {
   EditMessageText,
   StopPoll,
 } from "../types/updating-messages/methods.ts";
-import { buildFormData, isBlob, isFormData, makeEndpoint } from "./utils.ts";
+import { buildFormData, isBlob, isFormData } from "./utils.ts";
 
 export abstract class TelegramApi {
-  constructor(private readonly token: string) {}
-
   getMe: GetMe = () => this.request<GetMe>("getMe");
+
+  logOut: LogOut = () => this.request<LogOut>("logOut");
+
+  close: Close = () => this.request<LogOut>("close");
 
   sendMessage: SendMessage = (params) =>
     this.request<SendMessage>("sendMessage", params);
 
   forwardMessage: ForwardMessage = (params) =>
     this.request<ForwardMessage>("forwardMessage", params);
+
+  copyMessage: CopyMessage = (params) =>
+    this.request<CopyMessage>("copyMessage", params);
 
   sendPhoto: SendPhoto = (params) => {
     if (isFormData(params)) {
@@ -309,6 +318,9 @@ export abstract class TelegramApi {
   unpinChatMessage: UnpinChatMessage = (params) =>
     this.request<UnpinChatMessage>("unpinChatMessage", params);
 
+  unpinAllChatMessages: UnpinAllChatMessages = (params) =>
+    this.request<UnpinAllChatMessages>("unpinAllChatMessages", params);
+
   leaveChat: LeaveChat = (params) =>
     this.request<LeaveChat>("leaveChat", params);
 
@@ -507,48 +519,14 @@ export abstract class TelegramApi {
   getGameHighScores: GetGameHighScores = (params) =>
     this.request<GetGameHighScores>("getGameHighScores", params);
 
-  private request<T extends Method>(
+  //TODO: consider combining into one abstract method callAPI, with multipart/json req type parameter
+  protected abstract request<T extends Method>(
     methodName: string,
     params?: Parameters<T>[0],
-  ): ReturnType<T> {
-    return fetch(makeEndpoint(this.token, methodName), {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "connection": "keep-alive",
-      },
-      body: JSON.stringify(params),
-    }).then((response) => response.json())
-      .then((body) => {
-        if (body.ok) {
-          return body.result;
-        } else {
-          // TODO: handle ResponseParameters https://core.telegram.org/bots/api#responseparameters
-          // TODO: combine with duplicate in multipartRequest
-          const { error_code, description } = body;
-          throw new Error(`${error_code}\n${description}`);
-        }
-      }) as ReturnType<T>;
-  }
-  private multipartRequest<T extends Method>(
+  ): ReturnType<T>;
+
+  protected abstract multipartRequest<T extends Method>(
     methodName: string,
     formData: FormData,
-  ): ReturnType<T> {
-    return fetch(makeEndpoint(this.token, methodName), {
-      method: "POST",
-      headers: {
-        "connection": "keep-alive",
-      },
-      body: formData,
-    }).then((response) => response.json())
-      .then((body) => {
-        if (body.ok) {
-          return body.result;
-        } else {
-          // TODO: handle ResponseParameters https://core.telegram.org/bots/api#responseparameters
-          const { error_code, description } = body;
-          throw new Error(`${error_code}\n${description}`);
-        }
-      }) as ReturnType<T>;
-  }
+  ): ReturnType<T>;
 }

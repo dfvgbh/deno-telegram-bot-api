@@ -1,6 +1,6 @@
 import { Update } from "../types/getting-updates/objects.ts";
-import { PollingOptions } from "./polling.ts";
-import { WebhookServerOptions } from "./webhook-server.ts";
+import { PollingParams } from "./polling.ts";
+import { WebhookServerParams } from "./webhook-server.ts";
 
 export type UpdatesCallback = (
   updates?: Update[],
@@ -10,7 +10,7 @@ export type UpdatesCallback = (
 export interface UpdatesStrategy {
   run(
     updatesCallback: UpdatesCallback,
-    options?: PollingOptions | WebhookServerOptions,
+    params?: PollingParams | WebhookServerParams,
   ): void;
   stop(): void;
 }

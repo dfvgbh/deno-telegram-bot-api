@@ -65,8 +65,8 @@ export function toUpdateEvent(
   });
 }
 
-export function makeEndpoint(token: string, methodName: string) {
-  return `https://api.telegram.org/bot${token}/${methodName}`;
+export function makeEndpoint(url: string, token: string, methodName: string) {
+  return `${url}${token}/${methodName}`;
 }
 
 export function buildFormData(initObject: { [key: string]: any }) {

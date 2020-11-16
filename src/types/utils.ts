@@ -4,3 +4,11 @@ import { InputFile } from "./common/objects.ts";
 export interface Attachments {
   [key: string]: InputFile;
 }
+
+export enum DiceEmoji {
+  Dice = "🎲",
+  Darts = "🎯",
+  Basketball = "🏀",
+  Football = "⚽",
+  SlotMachine = "🎰",
+}

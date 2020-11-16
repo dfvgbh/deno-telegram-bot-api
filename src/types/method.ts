@@ -1,5 +1,7 @@
 import {
   AnswerCallbackQuery,
+  Close,
+  CopyMessage,
   DeleteChatPhoto,
   DeleteChatStickerSet,
   EditMessageLiveLocation,
@@ -15,6 +17,7 @@ import {
   GetUserProfilePhotos,
   KickChatMember,
   LeaveChat,
+  LogOut,
   PinChatMessage,
   PromoteChatMember,
   RestrictChatMember,
@@ -42,6 +45,7 @@ import {
   SetMyCommands,
   StopMessageLiveLocation,
   UnbanChatMember,
+  UnpinAllChatMessages,
   UnpinChatMessage,
 } from "./common/methods.ts";
 import { GetGameHighScores, SendGame, SetGameScore } from "./games/methods.ts";
@@ -79,8 +83,11 @@ import {
 
 export type Method =
   | GetMe
+  | LogOut
+  | Close
   | SendMessage
   | ForwardMessage
+  | CopyMessage
   | SendPhoto
   | SendAudio
   | SendDocument
@@ -112,6 +119,7 @@ export type Method =
   | SetChatDescription
   | PinChatMessage
   | UnpinChatMessage
+  | UnpinAllChatMessages
   | LeaveChat
   | GetChat
   | GetChatAdministrators

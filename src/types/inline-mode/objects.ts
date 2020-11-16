@@ -3,7 +3,12 @@
  * @see https://core.telegram.org/bots/api#inline-mode
  */
 
-import { InlineKeyboardMarkup, Location, User } from "../common/objects.ts";
+import {
+  InlineKeyboardMarkup,
+  Location,
+  MessageEntity,
+  User,
+} from "../common/objects.ts";
 
 /**
  * @see https://core.telegram.org/bots/api#inlinequery
@@ -72,6 +77,7 @@ export interface InlineQueryResultPhoto {
   description?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -91,6 +97,7 @@ export interface InlineQueryResultGif {
   title?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -110,6 +117,7 @@ export interface InlineQueryResultMpeg4Gif {
   title?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -126,6 +134,7 @@ export interface InlineQueryResultVideo {
   title: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   video_width?: number;
   video_height?: number;
   video_duration?: number;
@@ -144,6 +153,7 @@ export interface InlineQueryResultAudio {
   title: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   performer?: string;
   audio_duration?: number;
   reply_markup?: InlineKeyboardMarkup;
@@ -160,6 +170,7 @@ export interface InlineQueryResultVoice {
   title: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   voice_duration?: number;
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
@@ -174,6 +185,7 @@ export interface InlineQueryResultDocument {
   title: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   document_url: string;
   mime_type: string;
   description?: string;
@@ -193,7 +205,10 @@ export interface InlineQueryResultLocation {
   latitude: number;
   longitude: number;
   title: string;
+  horizontal_accuracy?: number;
   live_period?: number;
+  heading?: number;
+  proximity_alert_radius?: number;
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
   thumb_url?: string;
@@ -213,6 +228,8 @@ export interface InlineQueryResultVenue {
   address: string;
   foursquare_id?: string;
   foursquare_type?: string;
+  google_place_id?: string;
+  google_place_type?: string;
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
   thumb_url?: string;
@@ -258,6 +275,7 @@ export interface InlineQueryResultCachedPhoto {
   description?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -272,6 +290,7 @@ export interface InlineQueryResultCachedGif {
   title?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -286,6 +305,7 @@ export interface InlineQueryResultCachedMpeg4Gif {
   title?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -312,6 +332,7 @@ export interface InlineQueryResultCachedDocument {
   description?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -327,6 +348,7 @@ export interface InlineQueryResultCachedVideo {
   description?: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -341,6 +363,7 @@ export interface InlineQueryResultCachedVoice {
   title: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -354,6 +377,7 @@ export interface InlineQueryResultCachedAudio {
   audio_file_id: string;
   caption?: string;
   parse_mode?: string;
+  caption_entities?: MessageEntity[];
   reply_markup?: InlineKeyboardMarkup;
   input_message_content?: InputMessageContent;
 }
@@ -373,6 +397,7 @@ export type InputMessageContent =
 export interface InputTextMessageContent {
   message_text: string;
   parse_mode?: string;
+  entities?: MessageEntity[];
   disable_web_page_preview?: boolean;
 }
 
@@ -382,7 +407,10 @@ export interface InputTextMessageContent {
 export interface InputLocationMessageContent {
   latitude: number;
   longitude: number;
+  horizontal_accuracy?: number;
   live_period?: number;
+  heading?: number;
+  proximity_alert_radius?: number;
 }
 
 /**
@@ -395,6 +423,8 @@ export interface InputVenueMessageContent {
   address: string;
   foursquare_id?: string;
   foursquare_type?: string;
+  google_place_id?: string;
+  google_place_type?: string;
 }
 
 /**
