@@ -1,3 +1,5 @@
+[![Bot API Version](https://img.shields.io/badge/Bot%20API-v5.0-blue)](https://core.telegram.org/bots/api)
+
 # deno-telegram-bot-api
 🦕 wrapper for Telegram Bot API 
 
