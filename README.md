@@ -3,7 +3,7 @@
 # deno-telegram-bot-api
 🦕 wrapper for Telegram Bot API 
 
-Join Discord channel https://discord.gg/8PbtQq
+Join Discord channel https://discord.gg/6VMcmxAnT8
 
 ## Features
 - Fully typed API follows the official [Telegram API](https://core.telegram.org/bots/api) (v5.0)
