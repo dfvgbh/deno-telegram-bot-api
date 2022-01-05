@@ -15,19 +15,46 @@ Join Discord channel https://discord.gg/6VMcmxAnT8
 
 For all examples check the [examples directory](https://github.com/dfvgbh/deno-telegram-bot-api/tree/master/examples)
 
-The example of a bot which responds with a file containing a user message inside.
+
+### Send Text Message
 
 ```ts
 import { TelegramBot, UpdateType } from "https://deno.land/x/telegram_bot_api/mod.ts"
+import "https://deno.land/x/dot_env@0.2.0/load.ts"
 
 const TOKEN = Deno.env.get("TOKEN");
 if (!TOKEN) throw new Error("Bot token is not provided");
 const bot = new TelegramBot(TOKEN);
 
-bot.on(UpdateType.Message, async ({ message }) => {
-  const text = message.text || "I can't hear you";
+bot.on(UpdateType.Message, async (message: any) => {
+
+    const text = message.message.text || "I can't hear you";
+
+    await bot.sendMessage({ chat_id: message.message.chat.id, text: `echo ${text}` })
+
+});
+
+bot.run({
+    polling: true,
+});
+
+```
+
+### Send Text File
+The example of a bot which responds with a file containing a user message inside.
+
+```ts
+import { TelegramBot, UpdateType } from "https://deno.land/x/telegram_bot_api/mod.ts"
+import "https://deno.land/x/dot_env@0.2.0/load.ts"
+
+const TOKEN = Deno.env.get("TOKEN");
+if (!TOKEN) throw new Error("Bot token is not provided");
+const bot = new TelegramBot(TOKEN);
+
+bot.on(UpdateType.Message, async (message: any) => {
+  const text = message.message.text || "I can't hear you";
   await bot.sendDocument({
-    chat_id: message.chat.id,
+    chat_id: message.message.chat.id,
     document: new File([text], "echo.txt"),
   });
 });
