@@ -4,7 +4,7 @@ import {
   HTTPOptions,
   serve,
   Server,
-} from "https://deno.land/std/http/server.ts";
+} from "https://deno.land/std@0.106.0/http/server.ts";
 
 export interface WebhookServerParams extends HTTPOptions {
   /** Defaults to `/` */
@@ -22,9 +22,9 @@ export class WebhookServer implements UpdatesStrategy {
 
     try {
       const { pathname = "/", ...httpOptions } = params;
-      this.server = serve(httpOptions);
+      this.server = void (serve(httpOptions as any));
 
-      for await (const req of this.server) {
+      for await (const req of this.server as any) {
         if (req.url !== pathname) continue;
 
         const rawBody = await Deno.readAll(req.body);
