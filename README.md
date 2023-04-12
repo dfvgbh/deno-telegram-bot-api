@@ -1,6 +1,8 @@
 [![Bot API Version](https://img.shields.io/badge/Bot%20API-v5.0-blue)](https://core.telegram.org/bots/api)
 
-# deno-telegram-bot-api !!!NOT SUPPORTED!!!
+# !!!NOT SUPPORTED!!! 
+## it won't work with latest Deno versions, feel free to fork and update as you wish
+# deno-telegram-bot-api 
 🦕 wrapper for Telegram Bot API 
 
 Join Discord channel https://discord.gg/6VMcmxAnT8
